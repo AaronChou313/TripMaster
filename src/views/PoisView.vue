@@ -13,12 +13,12 @@
       </div>
       
       <!-- 搜索结果列表 -->
-      <div class="results-list">
+      <div class="results-list" ref="resultsList">
         <div 
           v-for="place in searchResults" 
           :key="place.id"
           class="result-item"
-          @click="centerMap(place.location)"
+          @click="selectSearchResult(place)"
         >
           <div class="result-info">
             <h3>{{ place.name }}</h3>
@@ -32,6 +32,9 @@
             {{ isPoiExists(place.id) ? '✓' : '+' }}
           </button>
         </div>
+        <div v-if="searchResults.length === 0 && searchKeyword" class="no-results">
+          未找到相关景点
+        </div>
       </div>
     </div>
     
@@ -43,17 +46,21 @@
     <!-- 兴趣点列表 -->
     <div class="pois-section">
       <h2>我的兴趣点 ({{ pois.length }})</h2>
-      <div class="pois-list">
+      <div class="pois-list" ref="poisList">
         <div 
           v-for="poi in pois" 
           :key="poi.id"
           class="poi-item"
+          @click="selectPoi(poi)"
         >
           <div class="poi-info">
             <h3>{{ poi.name }}</h3>
             <p>{{ poi.address || '地址未知' }}</p>
           </div>
-          <button @click="removePoi(poi.id)" class="remove-btn">-</button>
+          <button @click.stop="removePoi(poi.id)" class="remove-btn">-</button>
+        </div>
+        <div v-if="pois.length === 0" class="no-pois">
+          暂无兴趣点
         </div>
       </div>
     </div>
@@ -61,7 +68,7 @@
 </template>
 
 <script>
-import { ref, onMounted, nextTick } from 'vue';
+import { ref, onMounted, nextTick, watch } from 'vue';
 
 export default {
   name: 'PoisView',
@@ -71,8 +78,11 @@ export default {
     const searchResults = ref([]);
     const pois = ref([]);
     const mapContainer = ref(null);
+    const resultsList = ref(null);
+    const poisList = ref(null);
     let map = null;
-    let markers = [];
+    let searchMarkers = []; // 搜索结果标记
+    let poiMarkers = []; // 兴趣点标记
     const isSearching = ref(false);
 
     // 检查POI是否已存在
@@ -82,10 +92,9 @@ export default {
 
     // 搜索POI
     const searchPOIs = async () => {
-      console.log('搜索按钮被点击'); // 调试日志
-      console.log('搜索关键词:', searchKeyword.value); // 调试日志
+      console.log('搜索按钮被点击');
+      console.log('搜索关键词:', searchKeyword.value);
       
-      // 临时硬编码API密钥进行测试
       const apiKey = 'e953f2ed40d6ba23010ade13fe41d628';
       console.log('使用硬编码API密钥:', apiKey);
       
@@ -122,8 +131,15 @@ export default {
               typecode: poi.typecode
             }));
             console.log('搜索结果数量:', searchResults.value.length);
+            
+            // 标记搜索结果并自动缩放到第一个结果
+            await nextTick();
+            markSearchResults();
+            
             if (searchResults.value.length === 0) {
               window.notificationService?.showInfo('未找到相关地点');
+            } else {
+              window.notificationService?.showSuccess(`找到 ${searchResults.value.length} 个结果`);
             }
           } else {
             console.error('API返回错误:', data);
@@ -145,9 +161,11 @@ export default {
 
     // 标记搜索结果
     const markSearchResults = () => {
-      // 清除之前的标记
-      markers.forEach(marker => marker.setMap(null));
-      markers = [];
+      // 清除之前的搜索标记
+      searchMarkers.forEach(marker => marker.setMap(null));
+      searchMarkers = [];
+
+      if (searchResults.value.length === 0) return;
 
       searchResults.value.forEach((place, index) => {
         const [lng, lat] = place.location.split(',').map(Number);
@@ -155,23 +173,57 @@ export default {
           position: [lng, lat],
           title: place.name,
           label: {
-            content: place.name,
-            offset: new AMap.Pixel(10, -10)
-          }
+            content: `${index + 1}`,
+            offset: new AMap.Pixel(-5, -5)
+          },
+          icon: new AMap.Icon({
+            size: new AMap.Size(24, 24),
+            image: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_bs.png',
+            imageSize: new AMap.Size(24, 24)
+          })
+        });
+        
+        // 添加点击事件
+        marker.on('click', () => {
+          selectSearchResult(place);
         });
         
         marker.setMap(map);
-        markers.push(marker);
-        
-        // 第一个结果居中显示
-        if (index === 0) {
-          map.setCenter([lng, lat]);
-          map.setZoom(14);
-        }
+        searchMarkers.push(marker);
       });
+
+      // 自动缩放到第一个搜索结果
+      if (searchResults.value.length > 0) {
+        const firstPlace = searchResults.value[0];
+        const [lng, lat] = firstPlace.location.split(',').map(Number);
+        map.setCenter([lng, lat]);
+        map.setZoom(14);
+      }
     };
 
-    // 居中地图到指定位置
+    // 选择搜索结果
+    const selectSearchResult = (place) => {
+      console.log('选择搜索结果:', place.name);
+      const [lng, lat] = place.location.split(',').map(Number);
+      map.setCenter([lng, lat]);
+      map.setZoom(16);
+      
+      // 平滑移动到目标位置
+      map.panTo([lng, lat]);
+    };
+
+    // 选择兴趣点
+    const selectPoi = (poi) => {
+      console.log('选择兴趣点:', poi.name);
+      const [lng, lat] = poi.location.split(',').map(Number);
+      map.setCenter([lng, lat]);
+      map.setZoom(16);
+      
+      // 平滑移动到目标位置
+      map.panTo([lng, lat]);
+    };
+
+    // 居中地图到指定位置（保持原有功能）
     const centerMap = (location) => {
       const [lng, lat] = location.split(',').map(Number);
       map.setCenter([lng, lat]);
@@ -180,7 +232,10 @@ export default {
 
     // 添加兴趣点
     const addPoi = async (place) => {
-      if (isPoiExists(place.id)) return;
+      if (isPoiExists(place.id)) {
+        window.notificationService?.showInfo('该景点已在兴趣点列表中');
+        return;
+      }
 
       try {
         const response = await fetch('/api/pois', {
@@ -192,24 +247,79 @@ export default {
         if (response.ok) {
           const newPoi = await response.json();
           pois.value.push(newPoi);
-          loadPois(); // 重新加载以确保数据同步
+          window.notificationService?.showSuccess(`${place.name} 已添加到兴趣点`);
+          
+          // 重新标记所有兴趣点
+          await nextTick();
+          markPoiMarkers();
+        } else {
+          const errorText = await response.text();
+          window.notificationService?.showError(`添加失败: ${errorText}`);
         }
       } catch (error) {
         console.error('添加兴趣点失败:', error);
+        window.notificationService?.showError(`添加失败: ${error.message}`);
       }
     };
 
     // 移除兴趣点
     const removePoi = async (id) => {
+      const poiToRemove = pois.value.find(poi => poi.id === id);
+      if (!poiToRemove) return;
+
+      if (!window.confirm(`确定要移除 "${poiToRemove.name}" 吗？`)) {
+        return;
+      }
+
       try {
         const response = await fetch(`/api/pois/${id}`, { method: 'DELETE' });
         if (response.ok) {
           pois.value = pois.value.filter(poi => poi.id !== id);
-          loadPois(); // 重新加载以确保数据同步
+          window.notificationService?.showSuccess(`${poiToRemove.name} 已移除`);
+          
+          // 重新标记所有兴趣点
+          await nextTick();
+          markPoiMarkers();
+        } else {
+          const errorText = await response.text();
+          window.notificationService?.showError(`移除失败: ${errorText}`);
         }
       } catch (error) {
         console.error('移除兴趣点失败:', error);
+        window.notificationService?.showError(`移除失败: ${error.message}`);
       }
+    };
+
+    // 标记兴趣点
+    const markPoiMarkers = () => {
+      // 清除之前的兴趣点标记
+      poiMarkers.forEach(marker => marker.setMap(null));
+      poiMarkers = [];
+
+      pois.value.forEach((poi, index) => {
+        const [lng, lat] = poi.location.split(',').map(Number);
+        const marker = new AMap.Marker({
+          position: [lng, lat],
+          title: poi.name,
+          label: {
+            content: `★${index + 1}`,
+            offset: new AMap.Pixel(-8, -8)
+          },
+          icon: new AMap.Icon({
+            size: new AMap.Size(28, 28),
+            image: 'https://webapi.amap.com/theme/v1.3/markers/n/mark_r.png',
+            imageSize: new AMap.Size(28, 28)
+          })
+        });
+        
+        // 添加点击事件
+        marker.on('click', () => {
+          selectPoi(poi);
+        });
+        
+        marker.setMap(map);
+        poiMarkers.push(marker);
+      });
     };
 
     // 加载兴趣点
@@ -218,6 +328,13 @@ export default {
         const response = await fetch('/api/pois');
         if (response.ok) {
           pois.value = await response.json();
+          console.log('加载兴趣点数量:', pois.value.length);
+          
+          // 标记兴趣点
+          await nextTick();
+          markPoiMarkers();
+        } else {
+          console.error('加载兴趣点失败，状态码:', response.status);
         }
       } catch (error) {
         console.error('加载兴趣点失败:', error);
@@ -227,29 +344,57 @@ export default {
     // 初始化地图
     const initMap = () => {
       nextTick(() => {
-        map = new AMap.Map(mapContainer.value, {
-          zoom: 10,
-          center: [116.397428, 39.90923] // 默认北京
-        });
+        try {
+          map = new AMap.Map(mapContainer.value, {
+            zoom: 10,
+            center: [116.397428, 39.90923], // 默认北京
+            mapStyle: 'amap://styles/normal' // 设置地图样式
+          });
+          
+          console.log('地图初始化完成');
+          window.notificationService?.showSuccess('地图加载成功！');
+        } catch (error) {
+          console.error('地图初始化失败:', error);
+          window.notificationService?.showError('地图加载失败，请刷新页面重试');
+        }
       });
     };
 
     // 组件挂载时初始化
     onMounted(() => {
+      console.log('PoisView组件挂载');
       initMap();
       loadPois();
     });
+
+    // 监听搜索结果变化，自动标记
+    watch(searchResults, () => {
+      nextTick(() => {
+        markSearchResults();
+      });
+    });
+
+    // 监听兴趣点变化，自动标记
+    watch(pois, () => {
+      nextTick(() => {
+        markPoiMarkers();
+      });
+    }, { deep: true });
 
     return {
       searchKeyword,
       searchResults,
       pois,
       mapContainer,
+      resultsList,
+      poisList,
       isPoiExists,
       searchPOIs,
       centerMap,
       addPoi,
-      removePoi
+      removePoi,
+      selectSearchResult,
+      selectPoi
     };
   }
 };
@@ -273,6 +418,7 @@ export default {
   padding: 1rem;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   height: 100%; /* 占满整个高度 */
+  overflow: hidden; /* 防止溢出 */
 }
 
 .search-header {
@@ -315,6 +461,25 @@ export default {
   flex: 1;
   overflow-y: auto;
   min-height: 0; /* 允许flex子元素收缩 */
+  padding-right: 0.5rem; /* 为滚动条留出空间 */
+}
+
+.results-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.results-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.results-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.results-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }
 
 .result-item {
@@ -331,6 +496,10 @@ export default {
   background-color: #f8f9fa;
 }
 
+.result-item:last-child {
+  border-bottom: none;
+}
+
 .result-info h3 {
   font-size: 1rem;
   margin-bottom: 0.25rem;
@@ -340,6 +509,7 @@ export default {
 .result-info p {
   font-size: 0.875rem;
   color: #666;
+  margin: 0;
 }
 
 .add-btn {
@@ -368,6 +538,13 @@ export default {
   cursor: default;
 }
 
+.no-results {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-style: italic;
+}
+
 .map-section {
   background: white;
   border-radius: 10px;
@@ -389,6 +566,7 @@ export default {
   padding: 1rem;
   box-shadow: 0 2px 10px rgba(0,0,0,0.1);
   height: 100%; /* 占满整个高度 */
+  overflow: hidden; /* 防止溢出 */
 }
 
 .pois-section h2 {
@@ -402,6 +580,25 @@ export default {
   flex: 1;
   overflow-y: auto;
   min-height: 0; /* 允许flex子元素收缩 */
+  padding-right: 0.5rem; /* 为滚动条留出空间 */
+}
+
+.pois-list::-webkit-scrollbar {
+  width: 6px;
+}
+
+.pois-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.pois-list::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.pois-list::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
 }
 
 .poi-item {
@@ -410,6 +607,16 @@ export default {
   align-items: center;
   padding: 1rem;
   border-bottom: 1px solid #eee;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.poi-item:hover {
+  background-color: #f8f9fa;
+}
+
+.poi-item:last-child {
+  border-bottom: none;
 }
 
 .poi-info h3 {
@@ -421,6 +628,7 @@ export default {
 .poi-info p {
   font-size: 0.875rem;
   color: #666;
+  margin: 0;
 }
 
 .remove-btn {
@@ -441,5 +649,12 @@ export default {
   background: #ff6b6b;
   color: white;
   transform: scale(1.1);
+}
+
+.no-pois {
+  text-align: center;
+  padding: 2rem;
+  color: #666;
+  font-style: italic;
 }
 </style>

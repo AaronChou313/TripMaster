@@ -1,23 +1,23 @@
 <template>
   <div class="notification-container">
-    <transition-group name="notification" tag="div">
-      <div 
-        v-for="notification in notifications" 
-        :key="notification.id"
-        :class="['notification', `notification--${notification.type}`]"
-      >
-        <div class="notification__content">
-          <span class="notification__message">{{ notification.message }}</span>
-          <button 
-            class="notification__close" 
-            @click="removeNotification(notification.id)"
-          >
-            ×
-          </button>
-        </div>
-        <div class="notification__progress" :style="{ width: notification.progress + '%' }"></div>
+    <div 
+      v-for="notification in notifications" 
+      :key="notification.id"
+      :data-notification-id="notification.id"
+      :class="['notification', `notification--${notification.type}`]"
+      :style="getNotificationStyle(notification)"
+    >
+      <div class="notification__content">
+        <span class="notification__message">{{ notification.message }}</span>
+        <button 
+          class="notification__close" 
+          @click="removeNotification(notification.id)"
+        >
+          ×
+        </button>
       </div>
-    </transition-group>
+      <div class="notification__progress" :style="{ width: notification.progress + '%' }"></div>
+    </div>
   </div>
 </template>
 
@@ -30,7 +30,20 @@ export default {
     const notifications = ref([]);
     let notificationId = 0;
 
-    const addNotification = (message, type = 'info', duration = 3000) => {
+    // 根据进度计算样式
+    const getNotificationStyle = (notification) => {
+      const isVisible = notification.progress > 0;
+      const opacity = isVisible ? 1 : 0;
+      const translateX = isVisible ? '0' : '100%';
+      
+      return {
+        opacity: opacity,
+        transform: `translateX(${translateX})`,
+        transition: 'all 0.3s ease'
+      };
+    };
+
+    const addNotification = (message, type = 'info', duration = 2000) => {
       const id = ++notificationId;
       const notification = {
         id,
@@ -39,21 +52,26 @@ export default {
         progress: 100
       };
       
+      console.log(`创建通知: ${message}, 类型: ${type}, 持续时间: ${duration}ms`);
+      
       notifications.value.push(notification);
       
       // 进度条动画
+      const steps = 100;
+      const stepDuration = duration / steps;
+      
       const interval = setInterval(() => {
-        notification.progress -= 2;
+        notification.progress -= 1;
+        
         if (notification.progress <= 0) {
+          console.log(`通知 ${id} 完成`);
           clearInterval(interval);
-          removeNotification(id);
+          // 延迟移除以确保动画完成
+          setTimeout(() => {
+            removeNotification(id);
+          }, 300);
         }
-      }, duration / 50);
-
-      // 自动移除
-      setTimeout(() => {
-        removeNotification(id);
-      }, duration);
+      }, stepDuration);
 
       return id;
     };
@@ -102,7 +120,8 @@ export default {
 
     return {
       notifications,
-      removeNotification
+      removeNotification,
+      getNotificationStyle
     };
   }
 };
@@ -123,9 +142,6 @@ export default {
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   margin-bottom: 12px;
   overflow: hidden;
-  transform: translateX(100%);
-  opacity: 0;
-  transition: all 0.3s ease;
 }
 
 .notification.notification--success {
@@ -142,18 +158,6 @@ export default {
 
 .notification.notification--warning {
   border-left: 4px solid #FF9800;
-}
-
-.notification-enter-active,
-.notification-leave-active {
-  transform: translateX(0);
-  opacity: 1;
-}
-
-.notification-enter-from,
-.notification-leave-to {
-  transform: translateX(100%);
-  opacity: 0;
 }
 
 .notification__content {
@@ -194,7 +198,7 @@ export default {
 .notification__progress {
   height: 3px;
   background: linear-gradient(90deg, #667eea, #764ba2);
-  transition: width 0.06s linear;
+  transition: width 0.05s linear;
 }
 
 /* 响应式设计 */

@@ -422,10 +422,16 @@ export default {
     const drawRouteOnMap = () => {
       if (!map || !selectedItinerary.value?.pois?.length) return;
 
-      // 清除之前的路线
+      // 清除之前的路线和标记
       if (routePolyline) {
         routePolyline.setMap(null);
       }
+      
+      // 清除之前的标记
+      if (window.routeMarkers) {
+        window.routeMarkers.forEach(marker => marker.setMap(null));
+      }
+      window.routeMarkers = [];
 
       const locations = selectedItinerary.value.pois.map(poi => {
         const [lng, lat] = poi.location.split(',').map(Number);
@@ -433,20 +439,181 @@ export default {
       });
 
       if (locations.length > 1) {
+        // 绘制路线 - 使用高德地图内置方向箭头
         routePolyline = new AMap.Polyline({
           path: locations,
           strokeColor: "#3366FF",
           strokeWeight: 6,
-          strokeOpacity: 0.8
+          strokeOpacity: 0.8,
+          // 启用内置方向箭头
+          showDir: true,
+          dirColor: "#FFFFFF",  // 白色箭头
+          dirSize: 10,          // 箭头大小
+          geodesic: true,       // 使用大地曲线绘制
+          isOutline: true,      // 显示轮廓线
+          outlineColor: '#FFFFFF',
+          borderWeight: 1
         });
         routePolyline.setMap(map);
+
+        // 添加路线上的方向箭头标记（自定义箭头作为补充）
+        // addDirectionArrows(locations);
+
+        // 添加去重的景点标记
+        addUniquePoiMarkers();
 
         // 调整地图视野
         map.setFitView([routePolyline]);
       } else if (locations.length === 1) {
         map.setCenter(locations[0]);
         map.setZoom(15);
+        // 添加单一景点标记
+        addUniquePoiMarkers();
       }
+    };
+
+    // 添加方向箭头标记
+    const addDirectionArrows = (locations) => {
+      for (let i = 0; i < locations.length - 1; i++) {
+        const start = locations[i];
+        const end = locations[i + 1];
+        
+        // 计算中点位置
+        const midLng = (start.lng + end.lng) / 2;
+        const midLat = (start.lat + end.lat) / 2;
+        const midpoint = new AMap.LngLat(midLng, midLat);
+        
+        // 使用高德地图API计算更准确的方向角度
+        // 方法1: 使用AMap.GeometryUtil.angleOfLine计算线段角度
+        let angle;
+        try {
+          angle = AMap.GeometryUtil.angleOfLine([start, end]);
+          // angleOfLine返回的角度是以正北为0度，顺时针为正
+          // 转换为canvas绘图需要的角度（以正右为0度，逆时针为正）
+          angle = 90 - angle;
+          if (angle < 0) angle += 360;
+        } catch (error) {
+          // 如果API不可用，使用备用计算方法
+          console.warn('AMap.GeometryUtil.angleOfLine不可用，使用备用方法');
+          // 备用方法：考虑经纬度差异的修正计算
+          const deltaLng = end.lng - start.lng;
+          const deltaLat = end.lat - start.lat;
+          
+          // 考虑纬度对经度距离的影响
+          const avgLat = (start.lat + end.lat) / 2;
+          const lngFactor = Math.cos(avgLat * Math.PI / 180); // 纬度修正因子
+          
+          angle = Math.atan2(deltaLat, deltaLng * lngFactor) * 180 / Math.PI;
+        }
+        
+        // 创建方向箭头标记
+        const arrowMarker = new AMap.Marker({
+          position: midpoint,
+          icon: new AMap.Icon({
+            size: new AMap.Size(24, 24),
+            image: createArrowIcon(angle),
+            imageSize: new AMap.Size(24, 24)
+          }),
+          offset: new AMap.Pixel(-12, -12),
+          // 设置标记不响应鼠标事件，避免干扰
+          clickable: false
+        });
+        
+        arrowMarker.setMap(map);
+        window.routeMarkers.push(arrowMarker);
+      }
+    };
+
+    // 创建箭头图标
+    const createArrowIcon = (angle) => {
+      const canvas = document.createElement('canvas');
+      canvas.width = 24;
+      canvas.height = 24;
+      const ctx = canvas.getContext('2d');
+      
+      // 清除画布
+      ctx.clearRect(0, 0, 24, 24);
+      
+      // 旋转画布
+      ctx.translate(12, 12);
+      ctx.rotate(angle * Math.PI / 180);
+      
+      // 绘制箭头 - 使用更清晰的样式
+      ctx.fillStyle = '#FF6600'; // 橙色箭头
+      ctx.strokeStyle = '#FFFFFF'; // 白色边框
+      ctx.lineWidth = 2;
+      
+      // 绘制箭头主体
+      ctx.beginPath();
+      ctx.moveTo(0, -10);  // 箭头顶点
+      ctx.lineTo(-7, 6);   // 左侧点
+      ctx.lineTo(-2, 6);   // 左内侧点
+      ctx.lineTo(-2, 10);  // 左底部
+      ctx.lineTo(2, 10);   // 右底部
+      ctx.lineTo(2, 6);    // 右内侧点
+      ctx.lineTo(7, 6);    // 右侧点
+      ctx.closePath();
+      
+      ctx.fill();
+      ctx.stroke();
+      
+      return canvas.toDataURL();
+    };
+
+    // 添加去重的景点标记
+    const addUniquePoiMarkers = () => {
+      // 使用Map来去重，以location为key
+      const uniquePois = new Map();
+      
+      selectedItinerary.value.pois.forEach((poi, index) => {
+        const locationKey = poi.location;
+        if (!uniquePois.has(locationKey)) {
+          uniquePois.set(locationKey, {
+            ...poi,
+            visitOrder: [index + 1] // 记录访问顺序
+          });
+        } else {
+          // 如果已存在，添加访问顺序
+          uniquePois.get(locationKey).visitOrder.push(index + 1);
+        }
+      });
+
+      // 为每个唯一位置创建标记
+      uniquePois.forEach((poiData, locationKey) => {
+        const [lng, lat] = locationKey.split(',').map(Number);
+        const position = new AMap.LngLat(lng, lat);
+        
+        // 创建标记内容
+        let content = `<div style="
+          background: #667eea;
+          color: white;
+          padding: 6px 10px;
+          border-radius: 16px;
+          font-size: 12px;
+          font-weight: bold;
+          box-shadow: 0 2px 6px rgba(0,0,0,0.3);
+          white-space: nowrap;
+          border: 2px solid white;
+        ">${poiData.name}`;
+        
+        // 如果有多个访问顺序，显示所有顺序
+        if (poiData.visitOrder.length > 1) {
+          content += ` (${poiData.visitOrder.join(',')})`;
+        } else {
+          content += ` (${poiData.visitOrder[0]})`;
+        }
+        
+        content += '</div>';
+
+        const marker = new AMap.Marker({
+          position: position,
+          content: content,
+          offset: new AMap.Pixel(-20, -15)
+        });
+        
+        marker.setMap(map);
+        window.routeMarkers.push(marker);
+      });
     };
 
     // 加载数据

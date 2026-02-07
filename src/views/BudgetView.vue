@@ -1,14 +1,6 @@
 <template>
   <div class="budget-container">
-    <div class="budget-header">
-      <h1>预算管理</h1>
-      <div class="total-budget">
-        <div class="budget-card total">
-          <h2>总预算</h2>
-          <div class="amount">¥{{ totalBudget.toLocaleString() }}</div>
-        </div>
-      </div>
-    </div>
+    <h1 class="page-title">预算管理</h1>
     
     <div class="budget-content">
       <!-- 左侧预算分类 -->
@@ -101,16 +93,27 @@
         </div>
       </div>
       
-      <!-- 右侧图表区域 -->
-      <div class="budget-charts">
-        <div class="chart-section">
-          <h2>预算分布</h2>
-          <canvas ref="pieChartRef" class="chart-canvas"></canvas>
+      <!-- 右侧图表和总预算区域 -->
+      <div class="budget-sidebar">
+        <!-- 总预算卡片 -->
+        <div class="total-budget-card">
+          <div class="budget-card">
+            <h2>总预算</h2>
+            <div class="amount">¥{{ totalBudget.toLocaleString() }}</div>
+          </div>
         </div>
         
-        <div class="chart-section">
-          <h2>预算趋势</h2>
-          <canvas ref="barChartRef" class="chart-canvas"></canvas>
+        <!-- 图表区域 -->
+        <div class="budget-charts">
+          <div class="chart-section">
+            <h2>预算分布</h2>
+            <canvas ref="pieChartRef" class="chart-canvas"></canvas>
+          </div>
+          
+          <div class="chart-section">
+            <h2>预算趋势</h2>
+            <canvas ref="barChartRef" class="chart-canvas"></canvas>
+          </div>
         </div>
       </div>
     </div>
@@ -251,6 +254,7 @@ export default {
       } catch (error) {
         console.error('同步失败:', error);
         window.notificationService?.showError('同步失败，请重试');
+
       }
     };
 
@@ -311,11 +315,11 @@ export default {
         if (response.ok) {
           await loadBudgets();
           closeEditModal();
-          window.notificationService?.showSuccess('预算保存成功！');
+          window.notificationService?.showSuccess('预算保存成功！', 8000);
         }
       } catch (error) {
         console.error('预算保存失败:', error);
-        window.notificationService?.showError('保存失败，请重试');
+        window.notificationService?.showError('保存失败，请重试', 8000);
       }
     };
 
@@ -327,11 +331,11 @@ export default {
           const response = await fetch(`/api/budgets/${id}`, { method: 'DELETE' });
           if (response.ok) {
             await loadBudgets();
-            window.notificationService?.showSuccess('删除成功！');
+            window.notificationService?.showSuccess('预算删除成功！', 8000);
           }
         } catch (error) {
           console.error('删除失败:', error);
-          window.notificationService?.showError('删除失败，请重试');
+          window.notificationService?.showError('删除失败，请重试', 8000);
         }
       }
     };
@@ -541,44 +545,125 @@ export default {
   margin: 0 auto;
 }
 
-.budget-header {
-  margin-bottom: 2rem;
-}
-
-.budget-header h1 {
+.page-title {
   color: #333;
-  margin-bottom: 1rem;
+  margin-bottom: 2rem;
+  text-align: center;
+  font-size: 2rem;
 }
 
-.total-budget {
+.budget-content {
+  display: grid;
+  grid-template-columns: 1fr 350px;
+  gap: 2rem;
+  height: calc(100vh - 150px);
+}
+
+.budget-categories {
   display: flex;
-  justify-content: center;
+  flex-direction: column;
+  gap: 2rem;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.budget-categories::-webkit-scrollbar {
+  width: 6px;
+}
+
+.budget-categories::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.budget-categories::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.budget-categories::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.budget-sidebar {
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  height: 100%;
+}
+
+/* 总预算卡片样式 */
+.total-budget-card {
+  flex-shrink: 0;
 }
 
 .budget-card {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
   color: white;
-  padding: 2rem;
+  padding: 1.5rem;
   border-radius: 15px;
   text-align: center;
   box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-  min-width: 250px;
 }
 
 .budget-card h2 {
-  font-size: 1.5rem;
-  margin-bottom: 1rem;
+  font-size: 1.3rem;
+  margin-bottom: 0.75rem;
 }
 
 .amount {
-  font-size: 2.5rem;
+  font-size: 2rem;
   font-weight: 700;
 }
 
-.budget-content {
-  display: grid;
-  grid-template-columns: 1fr 400px;
-  gap: 2rem;
+.budget-charts {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  overflow-y: auto;
+  padding-right: 0.5rem;
+}
+
+.budget-charts::-webkit-scrollbar {
+  width: 6px;
+}
+
+.budget-charts::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.budget-charts::-webkit-scrollbar-thumb {
+  background: #c1c1c1;
+  border-radius: 3px;
+}
+
+.budget-charts::-webkit-scrollbar-thumb:hover {
+  background: #a8a8a8;
+}
+
+.chart-section {
+  background: white;
+  border-radius: 15px;
+  padding: 1.5rem;
+  box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+  flex-shrink: 0;
+}
+
+.chart-section h2 {
+  color: #333;
+  margin-bottom: 1.5rem;
+  text-align: center;
+  font-size: 1.25rem;
+}
+
+.chart-canvas {
+  width: 100%;
+  height: 250px;
+  background: #f8f9fa;
+  border-radius: 10px;
+  display: block;
 }
 
 .budget-categories {
@@ -815,10 +900,16 @@ export default {
 @media (max-width: 1200px) {
   .budget-content {
     grid-template-columns: 1fr;
+    height: auto;
+  }
+  
+  .budget-sidebar {
+    order: -1;
+    height: auto;
   }
   
   .budget-charts {
-    order: -1;
+    overflow-y: visible;
   }
 }
 </style>
