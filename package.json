@@ -1,0 +1,46 @@
+{
+  "name": "trip-master",
+  "version": "1.0.0",
+  "description": "旅行规划大师 - 基于高德地图API的旅行规划Web应用",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "nodemon server.js",
+    "client": "webpack serve --mode development",
+    "build": "webpack --mode production"
+  },
+  "keywords": [
+    "travel",
+    "planning",
+    "amap",
+    "vue",
+    "express"
+  ],
+  "author": "TripMaster Developer",
+  "license": "MIT",
+  "dependencies": {
+    "body-parser": "^1.20.2",
+    "cors": "^2.8.5",
+    "express": "^4.18.2"
+  },
+  "devDependencies": {
+    "@babel/core": "^7.29.0",
+    "@babel/preset-env": "^7.29.0",
+    "@vue/compiler-sfc": "^3.3.4",
+    "babel-loader": "^10.0.0",
+    "concurrently": "^8.2.0",
+    "css-loader": "^6.8.1",
+    "dotenv": "^17.2.4",
+    "dotenv-webpack": "^8.1.1",
+    "html-webpack-plugin": "^5.5.3",
+    "nodemon": "^3.0.1",
+    "style-loader": "^3.3.3",
+    "vue": "^3.3.4",
+    "vue-loader": "^17.2.2",
+    "vue-router": "^4.2.4",
+    "webpack": "^5.88.2",
+    "webpack-cli": "^5.1.4",
+    "webpack-dev-server": "^4.15.1"
+  }
+}

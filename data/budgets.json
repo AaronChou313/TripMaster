@@ -1,0 +1,70 @@
+[
+  {
+    "id": "1770468737955",
+    "name": "【住宿】昆明火车站国贸中心桔子水晶酒店",
+    "description": "285/晚，两晚",
+    "amount": 570,
+    "category": "custom",
+    "createdAt": "2026-02-07T12:52:17.985Z",
+    "updatedAt": "2026-02-07T13:05:30.344Z"
+  },
+  {
+    "id": "1770469281855",
+    "name": "武汉-昆明【飞机】",
+    "description": "500/人，两人票",
+    "amount": 1000,
+    "category": "transport",
+    "createdAt": "2026-02-07T13:01:21.891Z"
+  },
+  {
+    "id": "1770469330074",
+    "name": "昆明-大理【火车】",
+    "description": "160/人，两人票",
+    "amount": 320,
+    "category": "transport",
+    "createdAt": "2026-02-07T13:02:10.098Z"
+  },
+  {
+    "id": "1770469385930",
+    "name": "大理-丽江【火车】",
+    "description": "80/人，两人票",
+    "amount": 160,
+    "category": "transport",
+    "createdAt": "2026-02-07T13:03:05.954Z"
+  },
+  {
+    "id": "1770469412551",
+    "name": "丽江-武汉【飞机】",
+    "description": "600/人，两人票",
+    "amount": 1200,
+    "category": "transport",
+    "createdAt": "2026-02-07T13:03:32.580Z"
+  },
+  {
+    "id": "1770469578586",
+    "name": "【住宿】大理橄榄树海景度假酒店",
+    "description": "1800/晚，一晚（听涛·180°亲水全海景大床房）",
+    "amount": 1800,
+    "category": "custom",
+    "createdAt": "2026-02-07T13:06:18.616Z",
+    "updatedAt": "2026-02-07T13:06:28.906Z"
+  },
+  {
+    "id": "1770477529968",
+    "name": "【住宿】大理古城东门附近",
+    "description": "250-300/晚，三晚",
+    "amount": 900,
+    "category": "custom",
+    "createdAt": "2026-02-07T15:18:49.991Z",
+    "updatedAt": "2026-02-07T15:19:41.375Z"
+  },
+  {
+    "id": "1770477557108",
+    "name": "【住宿】丽江",
+    "description": "250-300/晚，两晚",
+    "amount": 600,
+    "category": "custom",
+    "createdAt": "2026-02-07T15:19:17.134Z",
+    "updatedAt": "2026-02-07T15:19:45.239Z"
+  }
+]
