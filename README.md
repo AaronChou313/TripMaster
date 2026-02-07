@@ -190,7 +190,7 @@ trip-master/
 
 如有问题或建议，请通过以下方式联系：
 - 提交GitHub Issue
-- 发送邮件至：developer@example.com
+- 发送邮件至：zhoumy0313@gmail.com
 
 ---
 
