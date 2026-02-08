@@ -4,6 +4,7 @@ import App from './App.vue';
 import PoisView from './views/PoisView.vue';
 import ItineraryView from './views/ItineraryView.vue';
 import BudgetView from './views/BudgetView.vue';
+import MemosView from './views/MemosView.vue'; // 恢复正常使用备忘录组件
 
 // 调试环境变量
 console.log('=== 环境变量调试信息 ===');
@@ -17,12 +18,13 @@ Object.keys(import.meta.env).forEach(key => {
   }
 });
 
-// 路由配置
+// 路由配置 - 恢复正常使用备忘录组件
 const routes = [
   { path: '/', redirect: '/pois' },
   { path: '/pois', component: PoisView, name: 'Pois' },
   { path: '/itinerary', component: ItineraryView, name: 'Itinerary' },
-  { path: '/budget', component: BudgetView, name: 'Budget' }
+  { path: '/budget', component: BudgetView, name: 'Budget' },
+  { path: '/memos', component: MemosView, name: 'Memos' } // 恢复正常使用
 ];
 
 const router = createRouter({
@@ -34,3 +36,13 @@ const router = createRouter({
 const app = createApp(App);
 app.use(router);
 app.mount('#app');
+
+// 全局通知服务
+window.notificationService = {
+  showSuccess(message) {
+    console.log('Success:', message);
+  },
+  showError(message) {
+    console.log('Error:', message);
+  }
+};

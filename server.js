@@ -23,7 +23,8 @@ app.use(express.static('dist'));
 const DATA_FILES = {
   pois: path.join(DATA_DIR, 'pois.json'),
   itineraries: path.join(DATA_DIR, 'itineraries.json'),
-  budgets: path.join(DATA_DIR, 'budgets.json')
+  budgets: path.join(DATA_DIR, 'budgets.json'),
+  memos: path.join(DATA_DIR, 'memos.json') // 添加备忘录数据文件
 };
 
 // 初始化数据文件
@@ -31,7 +32,8 @@ function initializeDataFiles() {
   const initData = {
     pois: [],
     itineraries: [],
-    budgets: []
+    budgets: [],
+    memos: [] // 初始化备忘录数组
   };
 
   Object.keys(DATA_FILES).forEach(key => {
@@ -220,6 +222,58 @@ app.delete('/api/budgets/:id', (req, res) => {
     res.json({ message: 'Budget deleted successfully' });
   } else {
     res.status(500).json({ error: 'Failed to delete budget' });
+  }
+});
+
+// 备忘录相关API
+app.get('/api/memos', (req, res) => {
+  const memos = readData('memos');
+  res.json(memos);
+});
+
+app.post('/api/memos', (req, res) => {
+  const memos = readData('memos');
+  const newMemo = {
+    id: Date.now().toString(),
+    title: req.body.title || '新备忘录',
+    content: req.body.content || '',
+    createdAt: new Date().toISOString(),
+    updatedAt: new Date().toISOString()
+  };
+  memos.push(newMemo);
+  if (writeData('memos', memos)) {
+    res.status(201).json(newMemo);
+  } else {
+    res.status(500).json({ error: 'Failed to save memo' });
+  }
+});
+
+app.put('/api/memos/:id', (req, res) => {
+  const memos = readData('memos');
+  const index = memos.findIndex(memo => memo.id === req.params.id);
+  if (index !== -1) {
+    memos[index] = { 
+      ...memos[index], 
+      ...req.body, 
+      updatedAt: new Date().toISOString() 
+    };
+    if (writeData('memos', memos)) {
+      res.json(memos[index]);
+    } else {
+      res.status(500).json({ error: 'Failed to update memo' });
+    }
+  } else {
+    res.status(404).json({ error: 'Memo not found' });
+  }
+});
+
+app.delete('/api/memos/:id', (req, res) => {
+  const memos = readData('memos');
+  const filteredMemos = memos.filter(memo => memo.id !== req.params.id);
+  if (writeData('memos', filteredMemos)) {
+    res.json({ message: 'Memo deleted successfully' });
+  } else {
+    res.status(500).json({ error: 'Failed to delete memo' });
   }
 });
 

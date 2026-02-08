@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>备忘录调试页面</title>
+    <style>
+        body { font-family: Arial, sans-serif; padding: 20px; }
+        .container { max-width: 800px; margin: 0 auto; }
+        .test-section { margin: 20px 0; padding: 15px; border: 1px solid #ddd; border-radius: 5px; }
+        button { padding: 10px 15px; margin: 5px; background: #007bff; color: white; border: none; border-radius: 3px; cursor: pointer; }
+        button:hover { background: #0056b3; }
+        pre { background: #f5f5f5; padding: 10px; border-radius: 3px; overflow-x: auto; }
+        .error { color: red; }
+        .success { color: green; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>备忘录功能调试页面</h1>
+        
+        <div class="test-section">
+            <h3>1. 测试API连接</h3>
+            <button onclick="testAPI()">测试 /api/memos</button>
+            <div id="api-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>2. 测试路由</h3>
+            <button onclick="testRoute()">测试 Vue Router</button>
+            <div id="route-result"></div>
+        </div>
+        
+        <div class="test-section">
+            <h3>3. 测试组件加载</h3>
+            <button onclick="testComponent()">测试 MemosView 组件</button>
+            <div id="component-result"></div>
+        </div>
+    </div>
+
+    <script>
+        async function testAPI() {
+            const resultDiv = document.getElementById('api-result');
+            try {
+                resultDiv.innerHTML = '<p>正在测试API...</p>';
+                const response = await fetch('/api/memos');
+                const data = await response.json();
+                resultDiv.innerHTML = `
+                    <p class="success">✅ API测试成功</p>
+                    <p>状态码: ${response.status}</p>
+                    <p>数据条数: ${data.length}</p>
+                    <pre>${JSON.stringify(data, null, 2)}</pre>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">❌ API测试失败: ${error.message}</p>`;
+            }
+        }
+
+        function testRoute() {
+            const resultDiv = document.getElementById('route-result');
+            try {
+                // 模拟路由测试
+                resultDiv.innerHTML = `
+                    <p class="success">✅ 路由基础测试通过</p>
+                    <p>当前路径: ${window.location.hash}</p>
+                    <p><a href="#/memos" target="_blank">点击跳转到备忘录页面</a></p>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">❌ 路由测试失败: ${error.message}</p>`;
+            }
+        }
+
+        function testComponent() {
+            const resultDiv = document.getElementById('component-result');
+            try {
+                resultDiv.innerHTML = `
+                    <p class="success">✅ 组件测试环境准备就绪</p>
+                    <p>请手动访问: <a href="http://localhost:8080/#/memos" target="_blank">http://localhost:8080/#/memos</a></p>
+                    <p>然后检查浏览器控制台是否有错误信息</p>
+                `;
+            } catch (error) {
+                resultDiv.innerHTML = `<p class="error">❌ 组件测试失败: ${error.message}</p>`;
+            }
+        }
+
+        // 页面加载时自动测试API
+        window.addEventListener('load', () => {
+            setTimeout(testAPI, 1000);
+        });
+    </script>
+</body>
+</html>

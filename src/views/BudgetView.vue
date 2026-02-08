@@ -1,6 +1,6 @@
 <template>
   <div class="budget-container">
-    <h1 class="page-title">预算管理</h1>
+    <!-- <h1 class="page-title">预算管理</h1> -->
     
     <div class="budget-content">
       <!-- 左侧预算分类 -->

@@ -21,6 +21,13 @@
 - **可视化统计**：饼图和柱状图展示预算分布
 - **灵活调整**：支持手动添加和修改各类预算
 
+### 📝 备忘事项界面
+- **Markdown编辑**：支持Markdown语法的富文本编辑器
+- **实时预览**：编辑时可随时切换预览模式查看效果
+- **快捷工具栏**：提供常用Markdown语法快捷插入按钮
+- **分类管理**：可创建多个备忘录，按时间排序管理
+- **数据持久化**：备忘录内容自动保存到本地JSON文件
+
 ### 📤 数据导出导入
 - **完整备份**：一键导出所有规划数据为JSON文件
 - **无缝迁移**：支持导入历史数据继续规划
@@ -100,14 +107,16 @@ trip-master/
 │   ├── views/             # 页面组件
 │   │   ├── PoisView.vue   # 景点筛选界面
 │   │   ├── ItineraryView.vue # 行程规划界面
-│   │   └── BudgetView.vue # 预算管理界面
+│   │   ├── BudgetView.vue # 预算管理界面
+│   │   └── MemosView.vue  # 备忘事项界面
 │   ├── App.vue           # 主应用组件
 │   └── main.js           # 应用入口
 ├── public/               # 静态资源
 ├── data/                 # 数据存储目录
 │   ├── pois.json        # 兴趣点数据
 │   ├── itineraries.json # 行程数据
-│   └── budgets.json     # 预算数据
+│   ├── budgets.json     # 预算数据
+│   └── memos.json       # 备忘录数据
 ├── server.js            # 后端服务器
 ├── webpack.config.js    # Webpack配置
 └── package.json         # 项目配置
@@ -131,6 +140,12 @@ trip-master/
 - `POST /api/budgets` - 添加预算
 - `PUT /api/budgets/:id` - 更新预算
 - `DELETE /api/budgets/:id` - 删除预算
+
+### 备忘录管理
+- `GET /api/memos` - 获取所有备忘录
+- `POST /api/memos` - 创建备忘录
+- `PUT /api/memos/:id` - 更新备忘录
+- `DELETE /api/memos/:id` - 删除备忘录
 
 ### 数据管理
 - `GET /api/export` - 导出所有数据
@@ -160,10 +175,17 @@ trip-master/
 3. 查看饼图了解预算分布
 4. 通过柱状图监控各项支出
 
+### 备忘事项
+1. 点击"新建备忘录"创建新的备忘事项
+2. 在编辑器中输入标题和内容（支持Markdown语法）
+3. 使用工具栏快捷插入常用格式
+4. 点击"预览"按钮查看渲染效果
+5. 备忘录自动保存，可随时查看和编辑
+
 ### 数据备份
 1. 点击导航栏"导出数据"保存当前规划
 2. 使用"导入数据"恢复历史规划
-3. 导出文件包含所有兴趣点、行程和预算信息
+3. 导出文件包含所有兴趣点、行程、预算和备忘录信息
 
 ## 注意事项
 
