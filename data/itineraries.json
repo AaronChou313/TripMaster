@@ -154,40 +154,165 @@
     "name": "Day3：昆明-大理",
     "date": "",
     "description": "",
-    "pois": [],
-    "createdAt": "2026-02-07T15:20:39.233Z"
+    "pois": [
+      {
+        "id": "B036705IZ2",
+        "name": "昆明站",
+        "address": "北京路1号",
+        "location": "102.722277,25.015257",
+        "createdAt": "2026-02-07T12:21:29.804Z",
+        "description": "",
+        "budget": 0,
+        "transport": {
+          "type": "train",
+          "description": "预算已在交通预算中计算过",
+          "budget": 0
+        }
+      },
+      {
+        "id": "B03680030R",
+        "name": "大理站",
+        "address": "巍山路261号",
+        "location": "100.250635,25.589569",
+        "tel": [],
+        "type": "交通设施服务;火车站;火车站",
+        "typecode": "150200",
+        "createdAt": "2026-02-07T17:44:37.585Z",
+        "description": "",
+        "budget": 0,
+        "transport": {
+          "type": "",
+          "description": "打车18km，25分钟",
+          "budget": 53
+        }
+      },
+      {
+        "id": "B0J1TSCF6W",
+        "name": "大理古城禧东智能轻奢民宿(洱海门店)",
+        "address": "大理古城大院子村东门六组223号",
+        "location": "100.172549,25.698019",
+        "tel": "13708649304;15187296119",
+        "type": "住宿服务;住宿服务相关;住宿服务相关",
+        "typecode": "100000",
+        "createdAt": "2026-02-07T15:16:02.153Z",
+        "description": "",
+        "budget": 0,
+        "transport": {
+          "type": "",
+          "description": "",
+          "budget": 0
+        }
+      }
+    ],
+    "createdAt": "2026-02-07T15:20:39.233Z",
+    "updatedAt": "2026-02-07T17:46:16.522Z"
   },
   {
     "id": "1770477655864",
-    "name": "Day4：大理海西第一天",
+    "name": "Day4：住海西古城东门",
     "date": "",
     "description": "",
-    "pois": [],
-    "createdAt": "2026-02-07T15:20:55.888Z"
+    "pois": [
+      {
+        "id": "B0J1TSCF6W",
+        "name": "大理古城禧东智能轻奢民宿(洱海门店)",
+        "address": "大理古城大院子村东门六组223号",
+        "location": "100.172549,25.698019",
+        "tel": "13708649304;15187296119",
+        "type": "住宿服务;住宿服务相关;住宿服务相关",
+        "typecode": "100000",
+        "createdAt": "2026-02-07T15:16:02.153Z",
+        "description": "",
+        "budget": 0,
+        "transport": {
+          "type": "",
+          "description": "",
+          "budget": 0
+        }
+      }
+    ],
+    "createdAt": "2026-02-07T15:20:55.888Z",
+    "updatedAt": "2026-02-07T17:50:56.690Z"
   },
   {
     "id": "1770477663648",
-    "name": "Day5：大理海西第二天",
+    "name": "Day5：住海东海景",
     "date": "",
     "description": "",
-    "pois": [],
-    "createdAt": "2026-02-07T15:21:03.667Z"
+    "pois": [
+      {
+        "id": "B0J1TSCF6W",
+        "name": "大理古城禧东智能轻奢民宿(洱海门店)",
+        "address": "大理古城大院子村东门六组223号",
+        "location": "100.172549,25.698019",
+        "tel": "13708649304;15187296119",
+        "type": "住宿服务;住宿服务相关;住宿服务相关",
+        "typecode": "100000",
+        "createdAt": "2026-02-07T15:16:02.153Z",
+        "description": "",
+        "budget": 0,
+        "transport": {
+          "type": "driving",
+          "description": "打车48km，54分钟",
+          "budget": 188
+        }
+      },
+      {
+        "id": "B0K3YOJNBZ",
+        "name": "大理橄榄树海景度假酒店(双廊洱海店)",
+        "address": "云南省大理白族自治州大理市双廊镇双廊村一组161号附3号(洱海生态保护核心区)",
+        "location": "100.191757,25.913509",
+        "tel": "18687962222;+861056320612,51543265",
+        "type": "住宿服务;宾馆酒店;宾馆酒店",
+        "typecode": "100100",
+        "createdAt": "2026-02-07T17:47:07.972Z",
+        "description": "",
+        "budget": 0,
+        "transport": {
+          "type": "",
+          "description": "",
+          "budget": 0
+        }
+      }
+    ],
+    "createdAt": "2026-02-07T15:21:03.667Z",
+    "updatedAt": "2026-02-07T17:51:04.657Z"
   },
   {
     "id": "1770477693189",
-    "name": "Day6：大理海东第一天",
+    "name": "Day6：住大理洱海南部",
     "date": "",
     "description": "",
     "pois": [],
-    "createdAt": "2026-02-07T15:21:33.216Z"
+    "createdAt": "2026-02-07T15:21:33.216Z",
+    "updatedAt": "2026-02-07T17:50:29.253Z"
   },
   {
     "id": "1770477786896",
     "name": "Day7：大理-丽江",
     "date": "",
     "description": "",
-    "pois": [],
-    "createdAt": "2026-02-07T15:23:06.919Z"
+    "pois": [
+      {
+        "id": "B03680030R",
+        "name": "大理站",
+        "address": "巍山路261号",
+        "location": "100.250635,25.589569",
+        "tel": [],
+        "type": "交通设施服务;火车站;火车站",
+        "typecode": "150200",
+        "createdAt": "2026-02-07T17:44:37.585Z",
+        "description": "",
+        "budget": 0,
+        "transport": {
+          "type": "",
+          "description": "",
+          "budget": 0
+        }
+      }
+    ],
+    "createdAt": "2026-02-07T15:23:06.919Z",
+    "updatedAt": "2026-02-07T17:51:48.814Z"
   },
   {
     "id": "1770477795368",

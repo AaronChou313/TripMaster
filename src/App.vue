@@ -3,17 +3,17 @@
     <header class="app-header">
       <h1>TripMaster 旅行规划助手</h1>
       <nav class="nav-menu">
-        <router-link to="/pois" class="nav-link">兴趣点管理</router-link>
+        <router-link to="/pois" class="nav-link">地点管理</router-link>
         <router-link to="/itinerary" class="nav-link">行程规划</router-link>
         <router-link to="/budget" class="nav-link">预算管理</router-link>
       </nav>
-      <div class="data-actions">
+      <!-- <div class="data-actions">
         <button @click="exportData" class="btn btn-secondary">导出数据</button>
         <label class="btn btn-secondary">
           导入数据
           <input type="file" @change="importData" accept=".json" style="display: none;">
         </label>
-      </div>
+      </div> -->
     </header>
     
     <main class="app-main">
@@ -227,7 +227,7 @@ body {
 }
 
 .app-main {
-  padding: 2rem;
+  padding: 1rem 2rem;
 }
 
 /* 滚动条样式 */
