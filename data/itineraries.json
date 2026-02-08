@@ -31,8 +31,8 @@
         "type": "住宿服务;宾馆酒店;宾馆酒店",
         "typecode": "100100",
         "createdAt": "2026-02-07T13:32:11.839Z",
-        "description": "",
-        "budget": 0,
+        "description": "晚饭，酒店附近觅食或点外卖",
+        "budget": 100,
         "transport": {
           "type": "",
           "description": "",
@@ -41,7 +41,7 @@
       }
     ],
     "createdAt": "2026-02-07T12:00:00.000Z",
-    "updatedAt": "2026-02-07T16:57:41.223Z"
+    "updatedAt": "2026-02-08T03:30:13.553Z"
   },
   {
     "id": "1770474320845",
@@ -75,8 +75,8 @@
         "type": "商务住宅;商务住宅相关;商务住宅相关",
         "typecode": "120000",
         "createdAt": "2026-02-07T14:13:14.211Z",
-        "description": "",
-        "budget": 0,
+        "description": "可以吃点当地特色",
+        "budget": 100,
         "transport": {
           "type": "walking",
           "description": "步行逛过去即可，大约18分钟",
@@ -89,7 +89,7 @@
         "address": "翠湖南路67号",
         "location": "102.703621,25.048416",
         "createdAt": "2026-02-07T12:21:39.993Z",
-        "description": "",
+        "description": "逛一逛即可",
         "budget": 0,
         "transport": {
           "type": "driving",
@@ -103,7 +103,7 @@
         "address": "滇池路1318号",
         "location": "102.658412,24.958925",
         "createdAt": "2026-02-07T12:21:50.652Z",
-        "description": "",
+        "description": "打打卡拍拍照",
         "budget": 0,
         "transport": {
           "type": "driving",
@@ -137,8 +137,8 @@
         "type": "住宿服务;宾馆酒店;宾馆酒店",
         "typecode": "100100",
         "createdAt": "2026-02-07T13:32:11.839Z",
-        "description": "",
-        "budget": 0,
+        "description": "回酒店点外卖晚饭",
+        "budget": 100,
         "transport": {
           "type": "",
           "description": "",
@@ -147,7 +147,7 @@
       }
     ],
     "createdAt": "2026-02-07T14:25:20.870Z",
-    "updatedAt": "2026-02-07T14:50:46.812Z"
+    "updatedAt": "2026-02-08T03:29:31.447Z"
   },
   {
     "id": "1770477639209",
@@ -155,6 +155,23 @@
     "date": "",
     "description": "",
     "pois": [
+      {
+        "id": "B0KK05DWCK",
+        "name": "昆明火车站国贸中心桔子水晶酒店",
+        "address": "金汁路356号",
+        "location": "102.742274,25.016546",
+        "tel": "0871-68277888",
+        "type": "住宿服务;宾馆酒店;宾馆酒店",
+        "typecode": "100100",
+        "createdAt": "2026-02-07T13:32:11.839Z",
+        "description": "早午饭，酒店附近觅食或点外卖",
+        "budget": 100,
+        "transport": {
+          "type": "driving",
+          "description": "打车2.8km，12分钟",
+          "budget": 10
+        }
+      },
       {
         "id": "B036705IZ2",
         "name": "昆明站",
@@ -178,12 +195,124 @@
         "type": "交通设施服务;火车站;火车站",
         "typecode": "150200",
         "createdAt": "2026-02-07T17:44:37.585Z",
+        "description": "租车，预算100/天，四天",
+        "budget": 400,
+        "transport": {
+          "type": "driving",
+          "description": "3.8km，16分钟",
+          "budget": 0
+        }
+      },
+      {
+        "id": "B0FFLLKKUM",
+        "name": "兴盛大桥",
+        "address": "大理市",
+        "location": "100.231074,25.599841",
+        "tel": [],
+        "type": "地名地址信息;交通地名;桥",
+        "typecode": "190307",
+        "createdAt": "2026-02-08T05:15:08.247Z",
+        "description": "",
+        "budget": 0,
+        "transport": {
+          "type": "driving",
+          "description": "14km，42分钟",
+          "budget": 0
+        }
+      },
+      {
+        "id": "B0J1TSCF6W",
+        "name": "大理古城禧东智能轻奢民宿(洱海门店)",
+        "address": "大理古城大院子村东门六组223号",
+        "location": "100.172549,25.698019",
+        "tel": "13708649304;15187296119",
+        "type": "住宿服务;住宿服务相关;住宿服务相关",
+        "typecode": "100000",
+        "createdAt": "2026-02-07T15:16:02.153Z",
+        "description": "晚饭，大理古城觅食",
+        "budget": 100,
+        "transport": {
+          "type": "",
+          "description": "",
+          "budget": 0
+        }
+      }
+    ],
+    "createdAt": "2026-02-07T15:20:39.233Z",
+    "updatedAt": "2026-02-08T05:26:16.495Z"
+  },
+  {
+    "id": "1770477655864",
+    "name": "Day4：住海西古城东门",
+    "date": "",
+    "description": "",
+    "pois": [
+      {
+        "id": "B0J1TSCF6W",
+        "name": "大理古城禧东智能轻奢民宿(洱海门店)",
+        "address": "大理古城大院子村东门六组223号",
+        "location": "100.172549,25.698019",
+        "tel": "13708649304;15187296119",
+        "type": "住宿服务;住宿服务相关;住宿服务相关",
+        "typecode": "100000",
+        "createdAt": "2026-02-07T15:16:02.153Z",
+        "description": "早午饭，大理古城附近觅食",
+        "budget": 100,
+        "transport": {
+          "type": "",
+          "description": "",
+          "budget": 0
+        }
+      },
+      {
+        "id": "B0368005Z0",
+        "name": "大理苍山世界地质公园",
+        "address": "Z013附近",
+        "location": "100.119072,25.657252",
+        "tel": "0872-2289977",
+        "type": "风景名胜;风景名胜;国家级景点|风景名胜;公园广场;公园",
+        "typecode": "110202|110101",
+        "createdAt": "2026-02-08T05:27:18.440Z",
         "description": "",
         "budget": 0,
         "transport": {
           "type": "",
-          "description": "打车18km，25分钟",
-          "budget": 53
+          "description": "",
+          "budget": 0
+        }
+      },
+      {
+        "id": "B0FFI6ZBLL",
+        "name": "龙龛码头",
+        "address": "大理镇环海西路龙龛生态园(北侧)",
+        "location": "100.206525,25.698072",
+        "tel": [],
+        "type": "交通设施服务;港口码头;港口码头",
+        "typecode": "150300",
+        "createdAt": "2026-02-08T05:27:55.191Z",
+        "description": "",
+        "budget": 0,
+        "transport": {
+          "type": "",
+          "description": "",
+          "budget": 0
+        }
+      },
+      {
+        "id": "B0368000BB",
+        "name": "才村码头",
+        "address": "月华路尽头",
+        "location": "100.193637,25.718727",
+        "tel": [],
+        "type": "交通设施服务;港口码头;港口码头",
+        "typecode": "150300",
+        "createdAt": "2026-02-08T05:28:30.918Z",
+        "description": "",
+        "budget": 0,
+        "transport": {
+          "type": "",
+          "description": "",
+          "budget": 0
         }
       },
       {
@@ -204,35 +333,8 @@
         }
       }
     ],
-    "createdAt": "2026-02-07T15:20:39.233Z",
-    "updatedAt": "2026-02-07T17:46:16.522Z"
-  },
-  {
-    "id": "1770477655864",
-    "name": "Day4：住海西古城东门",
-    "date": "",
-    "description": "",
-    "pois": [
-      {
-        "id": "B0J1TSCF6W",
-        "name": "大理古城禧东智能轻奢民宿(洱海门店)",
-        "address": "大理古城大院子村东门六组223号",
-        "location": "100.172549,25.698019",
-        "tel": "13708649304;15187296119",
-        "type": "住宿服务;住宿服务相关;住宿服务相关",
-        "typecode": "100000",
-        "createdAt": "2026-02-07T15:16:02.153Z",
-        "description": "",
-        "budget": 0,
-        "transport": {
-          "type": "",
-          "description": "",
-          "budget": 0
-        }
-      }
-    ],
     "createdAt": "2026-02-07T15:20:55.888Z",
-    "updatedAt": "2026-02-07T17:50:56.690Z"
+    "updatedAt": "2026-02-08T05:34:26.599Z"
   },
   {
     "id": "1770477663648",
@@ -253,8 +355,25 @@
         "budget": 0,
         "transport": {
           "type": "driving",
-          "description": "打车48km，54分钟",
-          "budget": 188
+          "description": "19km，47分钟",
+          "budget": 0
+        }
+      },
+      {
+        "id": "B0FFH27SSH",
+        "name": "喜洲古镇",
+        "address": "清真路130号",
+        "location": "100.131582,25.852950",
+        "tel": [],
+        "type": "风景名胜;风景名胜;风景名胜",
+        "typecode": "110200",
+        "createdAt": "2026-02-08T05:29:29.475Z",
+        "description": "",
+        "budget": 0,
+        "transport": {
+          "type": "driving",
+          "description": "沿环海路前往双廊海景房，32km，1小时10分钟",
+          "budget": 0
         }
       },
       {
@@ -276,16 +395,102 @@
       }
     ],
     "createdAt": "2026-02-07T15:21:03.667Z",
-    "updatedAt": "2026-02-07T17:51:04.657Z"
+    "updatedAt": "2026-02-08T05:37:54.253Z"
   },
   {
     "id": "1770477693189",
     "name": "Day6：住大理洱海南部",
     "date": "",
     "description": "",
-    "pois": [],
+    "pois": [
+      {
+        "id": "B0K3YOJNBZ",
+        "name": "大理橄榄树海景度假酒店(双廊洱海店)",
+        "address": "云南省大理白族自治州大理市双廊镇双廊村一组161号附3号(洱海生态保护核心区)",
+        "location": "100.191757,25.913509",
+        "tel": "18687962222;+861056320612,51543265",
+        "type": "住宿服务;宾馆酒店;宾馆酒店",
+        "typecode": "100100",
+        "createdAt": "2026-02-07T17:47:07.972Z",
+        "description": "",
+        "budget": 0,
+        "transport": {
+          "type": "",
+          "description": "",
+          "budget": 0
+        }
+      },
+      {
+        "id": "B0368000B7",
+        "name": "小普陀",
+        "address": "海东镇海印村77号",
+        "location": "100.223013,25.807452",
+        "tel": "13764308272",
+        "type": "风景名胜;风景名胜;风景名胜",
+        "typecode": "110200",
+        "createdAt": "2026-02-08T05:30:12.676Z",
+        "description": "",
+        "budget": 0,
+        "transport": {
+          "type": "",
+          "description": "",
+          "budget": 0
+        }
+      },
+      {
+        "id": "B0L0O5IV42",
+        "name": "文笔村风光景区",
+        "address": "文笔村",
+        "location": "100.233139,25.731445",
+        "tel": [],
+        "type": "风景名胜;风景名胜;风景名胜",
+        "typecode": "110200",
+        "createdAt": "2026-02-08T05:30:31.175Z",
+        "description": "",
+        "budget": 0,
+        "transport": {
+          "type": "",
+          "description": "",
+          "budget": 0
+        }
+      },
+      {
+        "id": "B0FFGJWJA3",
+        "name": "理想邦",
+        "address": "环海东路",
+        "location": "100.269930,25.698271",
+        "tel": "0872-2356033",
+        "type": "体育休闲服务;休闲场所;休闲场所|风景名胜;风景名胜相关;旅游景点",
+        "typecode": "080500|110000",
+        "createdAt": "2026-02-08T05:30:40.606Z",
+        "description": "",
+        "budget": 0,
+        "transport": {
+          "type": "",
+          "description": "",
+          "budget": 0
+        }
+      },
+      {
+        "id": "B03680030R",
+        "name": "大理站",
+        "address": "巍山路261号",
+        "location": "100.250635,25.589569",
+        "tel": [],
+        "type": "交通设施服务;火车站;火车站",
+        "typecode": "150200",
+        "createdAt": "2026-02-07T17:44:37.585Z",
+        "description": "",
+        "budget": 0,
+        "transport": {
+          "type": "",
+          "description": "",
+          "budget": 0
+        }
+      }
+    ],
     "createdAt": "2026-02-07T15:21:33.216Z",
-    "updatedAt": "2026-02-07T17:50:29.253Z"
+    "updatedAt": "2026-02-08T05:41:18.850Z"
   },
   {
     "id": "1770477786896",

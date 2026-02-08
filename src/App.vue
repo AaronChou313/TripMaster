@@ -182,7 +182,7 @@ body {
   display: flex;
   justify-content: center;
   gap: 2rem;
-  margin-bottom: 1rem;
+  margin-bottom: 0.5rem;
 }
 
 .nav-link {
@@ -227,7 +227,7 @@ body {
 }
 
 .app-main {
-  padding: 1rem 2rem;
+  padding: 0.5rem 2rem;
 }
 
 /* 滚动条样式 */
