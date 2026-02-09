@@ -490,7 +490,7 @@ export default {
 
 .memo-content-textarea {
   flex: 1;
-  padding: 20px;
+  padding: 1rem 2rem;
   border: none;
   resize: none;
   font-family: 'Consolas', 'Monaco', monospace;
@@ -503,7 +503,7 @@ export default {
 
 .markdown-preview {
   flex: 1;
-  padding: 12px 30px !important;
+  padding: 1rem 3rem !important;
   overflow-y: auto;
   background-color: white;
   border-left: none;

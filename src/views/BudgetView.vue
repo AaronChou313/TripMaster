@@ -65,6 +65,35 @@
         
         <div class="category-section">
           <div class="section-header">
+            <h2>住宿预算</h2>
+            <button @click="addAccommodationBudget" class="btn btn-primary">+ 添加</button>
+          </div>
+          <div class="budget-items">
+            <div 
+              v-for="item in accommodationBudgets" 
+              :key="item.id"
+              class="budget-item"
+            >
+              <div class="item-info">
+                <h3>{{ item.name }}</h3>
+                <p>{{ item.description || '无描述' }}</p>
+              </div>
+              <div class="item-amount">
+                ¥{{ item.amount?.toLocaleString() || 0 }}
+              </div>
+              <div class="item-actions">
+                <button @click="editBudget(item)" class="btn-icon edit">✏️</button>
+                <button @click="deleteBudget(item.id)" class="btn-icon delete">🗑️</button>
+              </div>
+            </div>
+          </div>
+          <div class="category-total">
+            小计: ¥{{ accommodationTotal.toLocaleString() }}
+          </div>
+        </div>
+        
+        <div class="category-section">
+          <div class="section-header">
             <h2>其他预算</h2>
             <button @click="addCustomBudget" class="btn btn-primary">+ 添加</button>
           </div>
@@ -140,6 +169,7 @@
             <select v-model="editingBudget.category" class="form-select">
               <option value="itinerary">行程</option>
               <option value="transport">交通</option>
+              <option value="accommodation">住宿</option>
               <option value="custom">其他</option>
             </select>
           </div>
@@ -177,6 +207,10 @@ export default {
       budgets.value.filter(b => b.category === 'transport')
     );
     
+    const accommodationBudgets = computed(() => 
+      budgets.value.filter(b => b.category === 'accommodation')
+    );
+    
     const customBudgets = computed(() => 
       budgets.value.filter(b => b.category === 'custom')
     );
@@ -189,12 +223,16 @@ export default {
       transportBudgets.value.reduce((sum, b) => sum + (b.amount || 0), 0)
     );
     
+    const accommodationTotal = computed(() => 
+      accommodationBudgets.value.reduce((sum, b) => sum + (b.amount || 0), 0)
+    );
+    
     const customTotal = computed(() => 
       customBudgets.value.reduce((sum, b) => sum + (b.amount || 0), 0)
     );
     
     const totalBudget = computed(() => 
-      itineraryTotal.value + transportTotal.value + customTotal.value
+      itineraryTotal.value + transportTotal.value + accommodationTotal.value + customTotal.value
     );
 
     // 从行程同步预算（按行程统计）
@@ -266,6 +304,18 @@ export default {
         description: '',
         amount: 0,
         category: 'transport'
+      };
+      showEditModal.value = true;
+    };
+
+    // 添加住宿预算
+    const addAccommodationBudget = () => {
+      editingBudget.value = {
+        id: null,
+        name: '',
+        description: '',
+        amount: 0,
+        category: 'accommodation'
       };
       showEditModal.value = true;
     };
@@ -384,7 +434,7 @@ export default {
       const ctx = pieChartRef.value.getContext('2d');
       const centerX = pieChartRef.value.width / 2;
       const centerY = pieChartRef.value.height / 2;
-      const radius = Math.min(centerX, centerY) - 20;
+      const radius = Math.min(centerX, centerY) - 50;
 
       // 清除画布
       ctx.clearRect(0, 0, pieChartRef.value.width, pieChartRef.value.height);
@@ -392,6 +442,7 @@ export default {
       const data = [
         { label: '行程', value: itineraryTotal.value, color: '#FF6384' },
         { label: '交通', value: transportTotal.value, color: '#36A2EB' },
+        { label: '住宿', value: accommodationTotal.value, color: '#4BC0C0' },
         { label: '其他', value: customTotal.value, color: '#FFCE56' }
       ];
 
@@ -448,6 +499,7 @@ export default {
       const data = [
         { label: '行程', value: itineraryTotal.value, color: '#FF6384' },
         { label: '交通', value: transportTotal.value, color: '#36A2EB' },
+        { label: '住宿', value: accommodationTotal.value, color: '#4BC0C0' },
         { label: '其他', value: customTotal.value, color: '#FFCE56' }
       ];
 
@@ -521,13 +573,16 @@ export default {
       barChartRef,
       itineraryBudgets,
       transportBudgets,
+      accommodationBudgets,
       customBudgets,
       itineraryTotal,
       transportTotal,
+      accommodationTotal,
       customTotal,
       totalBudget,
       syncFromItineraries,
       addTransportBudget,
+      addAccommodationBudget,
       addCustomBudget,
       editBudget,
       saveBudget,
